@@ -28,6 +28,8 @@ function App() {
       tileUrl: (col, row) => {
         return `${currentUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
       }
+    }, {
+      showLoader: false,
     });
   };
 
