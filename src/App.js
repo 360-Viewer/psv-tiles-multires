@@ -16,11 +16,12 @@ function App() {
         adapter={EquirectangularTilesAdapter}
         src={{
           width: 14400,
-          cols: 16,
-          rows: 8,
+          rows: 16,
+          cols: 8,
           baseUrl: `${baseUrl}pano.jpg`,
           tileUrl: (col, row) => {
-            return `${baseUrl}tiles/row-${row}-column-${col}.jpg`;
+            console.log(`col: ${col}, row: ${row}`);
+            return `${baseUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
           }
         }}
       />
