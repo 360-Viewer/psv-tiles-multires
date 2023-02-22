@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ReactPhotoSphereViewer, EquirectangularTilesAdapter } from "react-photo-sphere-viewer";
+import { ReactPhotoSphereViewer, EquirectangularTilesAdapter, VisibleRangePlugin } from "react-photo-sphere-viewer";
 
 
 function App() {
@@ -24,7 +24,6 @@ function App() {
       rows: 16,
       cols: 8,
       baseUrl: `${currentUrl}pano.jpg`,
-      baseBlur: true,
       tileUrl: (col, row) => {
         return `${currentUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
       }
@@ -33,10 +32,19 @@ function App() {
     });
   };
 
+  const handleRangeChange = () => {
+    const visibleRange = pSRef.current.getPlugin(VisibleRangePlugin);
+    visibleRange.setHorizontalRange(['0deg', '180deg']);
+    visibleRange.setVerticalRange(['0deg', '0deg']);
+  };
+
   return (
     <div style={{ width: '100%', height: '100%', top: '0', left: '0', position: 'absolute' }}>
       <button onClick={handleClick} style={{ position: 'absolute', top: '0', left: '0', zIndex: '100' }}>
         switch view
+      </button>
+      <button onClick={handleRangeChange} style={{ position: 'absolute', top: '0', left: '100px', zIndex: '100' }}>
+        change visible range
       </button>
       <ReactPhotoSphereViewer
         ref={pSRef}
@@ -54,6 +62,12 @@ function App() {
             return `${baseUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
           }
         }}
+        plugins={[
+          [VisibleRangePlugin, {
+            // horizontalRange: [-Math.PI / 2, Math.PI / 2],
+            // verticalRange: [-Math.PI / 3, Math.PI / 3],
+          }],
+        ]}
       />
     </div>
   );
