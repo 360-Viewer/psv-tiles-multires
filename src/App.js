@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ReactPhotoSphereViewer, EquirectangularTilesAdapter } from "react-photo-sphere-viewer";
 
 
@@ -8,22 +8,25 @@ function App() {
   const [baseUrl, setBaseUrl] = React.useState('./assets/day/');
 
   const handleClick = () => {
+    let currentUrl;
     console.log(pSRef.current);
     if (view === 'day') {
       setView('night');
       setBaseUrl('./assets/night/');
+      currentUrl = './assets/night/';
     } else {
       setView('day');
       setBaseUrl('./assets/day/');
+      currentUrl = './assets/day/';
     }
     pSRef.current.setPanorama({
       width: 14400,
       rows: 16,
       cols: 8,
-      baseUrl: `${baseUrl}pano.jpg`,
+      baseUrl: `${currentUrl}pano.jpg`,
       baseBlur: true,
       tileUrl: (col, row) => {
-        return `${baseUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
+        return `${currentUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
       }
     });
   };
