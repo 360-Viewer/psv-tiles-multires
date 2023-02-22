@@ -3,13 +3,38 @@ import { ReactPhotoSphereViewer, EquirectangularTilesAdapter } from "react-photo
 
 
 function App() {
+  const [view, setView] = React.useState('day');
   const pSRef = React.useRef(null);
-  const baseUrl = './assets/';
-  // const baseUrl = "https://photo-sphere-viewer-data.netlify.app/assets/";
+  const [baseUrl, setBaseUrl] = React.useState('./assets/day/');
+
+  const handleClick = () => {
+    console.log(pSRef.current);
+    if (view === 'day') {
+      setView('night');
+      setBaseUrl('./assets/night/');
+    } else {
+      setView('day');
+      setBaseUrl('./assets/day/');
+    }
+    pSRef.current.setPanorama({
+      width: 14400,
+      rows: 16,
+      cols: 8,
+      baseUrl: `${baseUrl}pano.jpg`,
+      baseBlur: true,
+      tileUrl: (col, row) => {
+        return `${baseUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
+      }
+    });
+  };
 
   return (
     <div style={{ width: '100%', height: '100%', top: '0', left: '0', position: 'absolute' }}>
+      <button onClick={handleClick} style={{ position: 'absolute', top: '0', left: '0', zIndex: '100' }}>
+        switch view
+      </button>
       <ReactPhotoSphereViewer
+        ref={pSRef}
         height={"100vh"}
         width={"100%"}
         keyboard={false}
@@ -19,8 +44,8 @@ function App() {
           rows: 16,
           cols: 8,
           baseUrl: `${baseUrl}pano.jpg`,
+          baseBlur: true,
           tileUrl: (col, row) => {
-            console.log(`col: ${col}, row: ${row}`);
             return `${baseUrl}tiles/row-${row + 1}-column-${col + 1}.jpg`;
           }
         }}
